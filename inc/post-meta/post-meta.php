@@ -58,7 +58,7 @@ class PostMeta
      * Check if a side has any panels.
      */
 
-    public function sideHasPanels(string $side = null, string | int $post_id = 0): bool
+    public function sideHasPanels(?string $side = null, string | int $post_id = 0): bool
     {
         switch ($side) {
             case 'left':

@@ -760,9 +760,17 @@ class Documents
         }
 
         // We're uploading via the Media Library or non-document.
-        // Remove the disallowed file types.
-        foreach ($this->disallow_in_media_library as $ext) {
-            unset($mime_types[$ext]);
+        // Remove the disallowed file types. Keys can be patterns of several
+        // extensions (e.g. 'xla|xls|xlt|xlw'), so remove them from within each.
+        foreach ($mime_types as $pattern => $mime) {
+            $extensions = explode('|', $pattern);
+            $allowed = array_diff($extensions, $this->disallow_in_media_library);
+            if ($allowed !== $extensions) {
+                unset($mime_types[$pattern]);
+                if ($allowed) {
+                    $mime_types[implode('|', $allowed)] = $mime;
+                }
+            }
         }
 
         return $mime_types;
